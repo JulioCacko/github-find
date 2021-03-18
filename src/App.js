@@ -1,23 +1,22 @@
+import React from 'react';
+// importando Styles
+import "./styles/app.scss";
+// Importando componentes
+import Nav from "./components/Nav";
+import Search from "./components/Search";
+//Animation
+import { AnimatePresence } from "framer-motion"
+
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Nav />
+      <AnimatePresence exitBeforeEnter>
+        <Search />
+      </AnimatePresence>
     </div>
   );
 }
