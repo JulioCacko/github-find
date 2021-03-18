@@ -1,52 +1,41 @@
-import React, { useState, useEffect } from 'react';
-//Animations
-import { motion } from "framer-motion";
-import { pageAnimation } from "../animation";
+import React, { useState } from "react";
+// Importando Components
+import userCard from "./userCard";
 // Importando SemanticUI
-import { Form, Card, Icon } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 
 
 const Search = () => {
     // Definindo os paramentos a ser puxado pela API com useState
 
-    const [name, setName] = useState('');
-    const [followers, setFollowers] = useState('');
-    const [following, setFollowing] = useState('');
-    const [repos, setRepos] = useState('');
-    const [since, setSince] = useState('');
-    const [userInput, setUserInput] = useState('');
-    const [error, setError] = useState(null);
+    const [data, setData] = useState({});
+    const [username, setUsername] = useState("");
+    const [repositories, setRepositories] = useState([]);;
 
-    // Puxando dados pela API com useEffect
 
-    useEffect(() => {
-        fetch("https://api.github.com/users/juliocacko")
-            .then(res => res.json())
-            .then(data => {
-                setData(data);
-            });
-    }, []);
-
-    const setData = async ({ name, login, followers, following, repos, created_at }) => {
-        setName(name);
-        setFollowers(followers);
-        setFollowing(following)
-        setRepos(repos);
-        setSince(created_at);
-    };
 
     const handleSearch = (e) => {
-        setUserInput(e.target.value);
+        setUsername(e.target.value);
     };
 
-    const handleSubmit = () => {
-        fetch(`https://api.github.com/users/${userInput}`)
-            .then(res => res.json())
-            .then(data => {
-                setData(data);
-            })
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        const profile = await fetch(`https://api.github.com/users/${username}`);
+        const profileJson = await profile.json();
+
+
+        const repositories = await fetch(profileJson.repos_url);
+        const repoJson = await repositories.json();
+
+        if (profileJson) {
+            setData(profileJson);
+            setRepositories(repoJson);
+        }
+
     };
+
     return (
         <div className="search">
             <Form >
@@ -60,26 +49,7 @@ const Search = () => {
                         onClick={handleSubmit} />
                 </Form.Group>
             </Form>
-            <div className="user-detail">
-
-                <Card>
-                    <Card.Content>
-                        <Card.Header>{name}</Card.Header>
-                        <Card.Meta>
-                            <span className='date'>Membro desde  </span>
-                        </Card.Meta>
-                        <Card.Description>
-                            Matthew is a musician living in Nashville.
-                </Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                        <a>
-                            <Icon name='user' />
-                            {followers} followers / {following} followers /
-                    </a>
-                    </Card.Content>
-                </Card>
-            </div >
+            <userCard data={data} repositories={repositories} />
         </div>
     );
 };
