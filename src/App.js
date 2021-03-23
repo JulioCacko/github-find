@@ -14,9 +14,7 @@ function App() {
   return (
     <div className="App">
       <Nav />
-      <AnimatePresence exitBeforeEnter>
-        <Search />
-      </AnimatePresence>
+      <Search />
     </div>
   );
 }

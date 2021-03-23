@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // Importando Components
-import userCard from "./userCard";
+import Detail from "./Detail";
 // Importando SemanticUI
 import { Form } from 'semantic-ui-react'
 
@@ -15,8 +15,9 @@ const Search = () => {
 
 
 
+
     const handleSearch = (e) => {
-        setUsername(e.target.value);
+        setUsername(e.target.value.split(" ").join(""));
     };
 
     const handleSubmit = async e => {
@@ -36,6 +37,11 @@ const Search = () => {
 
     };
 
+    const handleClear = () => {
+        setData([]);
+    }
+
+
     return (
         <div className="search">
             <Form >
@@ -47,9 +53,11 @@ const Search = () => {
                     />
                     <Form.Button content='Pesquisar'
                         onClick={handleSubmit} />
+                    <Form.Button content='limpar'
+                        onClick={handleClear} />
                 </Form.Group>
             </Form>
-            <userCard data={data} repositories={repositories} />
+            <Detail data={data} repositories={repositories} />
         </div>
     );
 };
